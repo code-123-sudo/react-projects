@@ -1,12 +1,10 @@
 import React from 'react';
-
 // comment
 const List = ({ people }) => {
-	let [people,setPeople] = React.useState([]);
     return (
     <>
     	{people.map(( person ) => {
-    		let { id, name , age, image } = people;
+    		let { id, name , age, image } = person;
              return (
              	<article key={id} className='person'>
              		<img src={image} alt={name} />

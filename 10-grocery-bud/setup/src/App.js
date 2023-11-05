@@ -14,41 +14,62 @@ function App() {
 	const [list, setList] = useState(getLocalStorage());
 	const [isEditing, setIsEditing] = useState(false);
  	const [editId, setEditId] = useState(null);
-
-	const clearList = () => {
-		setList([]);
-	}
-
+ 	const [alert, setAlert] = useState({ show: false, msg: '', type: ''});
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (!name){
-
+			showAlert(true, 'danger', 'please enter value');
 		}
 		else if (name && isEditing) {
+			setList(
+				list.map((item) => {
+					if (item.id === editId) {
+						return { ...item, title: name}
+					}
+					return item;	
+				})
+			)
+			setName('');
+			setEditID(null)
+			showIsEditing(false);
+			showAlert(true, 'success', 'item added to the list');
 		} else {
+			showAlert(true, 'success', 'value changed');
 			const newItem = { id: new Date().getTime().toString(), title: name};
 			setList([...list, newItem])
+			//showAlert(true, 'success', 'item added to the list');
 			setName('')
 		}
 
+	};
+	const showAlert = (show = false, type = '', msg = '') => {
+		setAlert({ show, type, msg})
 	}
-
-
-	
-
+	const clearList = () => {
+		showAlert(true, 'danger', 'item removed');
+		setList([]);
+	};
+	const removeItem = (id) => {
+		showAlert(true, 'danger', 'item removed');
+		setList(list.filter((item) => item.id !=== id));
+	};
 	const editItem = (id) => {
 		const specificItem = list.find((item) => item.id ===  id);
 		setIsEditing(true)
 		setEditID(id);
 		setName(specificItem.title);
 	};
+	const clearList = () => {
+		setList([]);
+	}
 	useEffect(() => {
-
+		localStorage.setItem('list', JSON.stringify)
 	},[list])
 
   return (
   	<section className='section-center'>
   		<form className='grocery-form' onSubmit={handleSubmit}>
+  			{alert.show && <Alert {...alert} removeAlert={showAlert} list={list} />}
   			<h3>grocery bud</h3>
   			<div className='form-control'>
   				<input

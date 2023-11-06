@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import List from './List'
 import Alert from './Alert'
-getLocalStorage = () => {
+const isJson = (str) => {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+const getLocalStorage = () => {
 	let list = localStorage.getItem('list');
-	if (list) {
-		return ( list = JSON.parse(localStorage.getItem('list')));
+
+	if (list && isJson(list)) {
+		list = JSON.parse(localStorage.getItem('list'));
+		return list;
 	} else {
 		return [];
 	}
@@ -30,8 +40,8 @@ function App() {
 				})
 			)
 			setName('');
-			setEditID(null)
-			showIsEditing(false);
+			setEditId(null);
+			setIsEditing(false);
 			showAlert(true, 'success', 'item added to the list');
 		} else {
 			showAlert(true, 'success', 'value changed');
@@ -51,19 +61,16 @@ function App() {
 	};
 	const removeItem = (id) => {
 		showAlert(true, 'danger', 'item removed');
-		setList(list.filter((item) => item.id !=== id));
+		setList(list.filter((item) => item.id !== id));
 	};
 	const editItem = (id) => {
 		const specificItem = list.find((item) => item.id ===  id);
 		setIsEditing(true)
-		setEditID(id);
+		setEditId(id);
 		setName(specificItem.title);
 	};
-	const clearList = () => {
-		setList([]);
-	}
 	useEffect(() => {
-		localStorage.setItem('list', JSON.stringify)
+		localStorage.setItem('list', JSON.stringify(list))
 	},[list])
 
   return (

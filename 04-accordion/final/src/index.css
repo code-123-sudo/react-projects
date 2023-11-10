@@ -63,7 +63,7 @@ Global Styles
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  background: var(--clr-purple);
+  background: var();
   color: var(--clr-grey-1);
   line-height: 1.5;
   font-size: 0.875rem;
@@ -138,6 +138,33 @@ main {
   align-items: center;
 }
 
+.right {
+  margin-left: 400px;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width : 800px;
+}
+.chat-left {
+  justify-content: flex-start;
+  border-radius: 24px;
+  padding: 20px;
+  border: 4px solid white;
+  width: max-content;
+  background: #87CEEB;
+}
+
+.chat-right {
+  justify-content: flex-start;
+  border-radius: 24px;
+  padding: 20px;
+  border: 4px solid white;
+  width: max-content;
+  background: #87CEEB;
+}
+
 input {
   width : 700px;
   height : 50px;
@@ -150,6 +177,7 @@ button {
   background-color : #87CEEB;
   text-align: center;
   font-size: 20px;
+  cursor:pointer;
 }
 
 button :: hover {

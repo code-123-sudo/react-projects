@@ -4,17 +4,21 @@ import SingleQuestion from './Question';
 function App() {
   const [message, setMessage] = useState('');
   const [userMessages, setUserMessages] = useState([]);
+  const [isTypingLeft,setIsTypingLeft] = useState(false);
+  const [isTypingRight,setIsTypingRight] = useState(false);
   const handleChange = (event) => {
     setMessage(event.target.value)
   }
   useEffect(() => { console.log(userMessages)
     setMessage('');
    }, [userMessages])
-  const addToArray2 = () => {
-    setUserMessages(userMessages => [...userMessages,{message:"Lorem ipsum dolor sit amettas tristique. ",isReply:true}]);
+  const addToArray2 = async () => {
+    await setUserMessages(userMessages => [...userMessages,{message:"Lorem ipsum dolor sit amettas tristique. ",isReply:true}]);
+    await setIsTypingRight(false)
   }
-  const addToArray = () => {
-    setUserMessages(userMessages => [...userMessages,{message:message,isReply:false}]);
+  const addToArray = async () => {
+    await setIsTypingRight(true)
+    await setUserMessages(userMessages => [...userMessages,{message:message,isReply:false}]);
     setTimeout(addToArray2,1000)
   }
   return (
@@ -28,6 +32,19 @@ function App() {
                   {value.message}
                 </div>
                 )
+            }else if ( isTypingLeft ){
+              return (
+                  <div className='chat-left'>
+                  "...typing"
+                </div>
+              )
+            }
+            else if ( isTypingRight ){
+              return (
+                  <div className='chat-right'>
+                  "...typing"
+                </div>
+              )
             }else {
               return (
                 <div className='chat-right'>

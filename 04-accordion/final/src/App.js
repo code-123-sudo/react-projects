@@ -41,16 +41,16 @@ function App() {
             }
         })}
           {
-            if( isTypingLeft ){
+            isTypingLeft &&
                 <div className='chat-left'>
-                  "...typing"
+                  ...typing
                 </div>
-              }
-            if ( isTypingRight ){
+            }
+            {
+             isTypingRight &&
                 <div className='chat-right'>
-                  "...typing"
+                  ...typing
                 </div>
-              }
             }
         </div>
 

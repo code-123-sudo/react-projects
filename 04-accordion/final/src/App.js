@@ -32,19 +32,6 @@ function App() {
                   {value.message}
                 </div>
                 )
-            }else if ( isTypingLeft ){
-              return (
-                  <div className='chat-left'>
-                  "...typing"
-                </div>
-              )
-            }
-            else if ( isTypingRight ){
-              return (
-                  <div className='chat-right'>
-                  "...typing"
-                </div>
-              )
             }else {
               return (
                 <div className='chat-right'>
@@ -53,7 +40,20 @@ function App() {
               )
             }
         })}
+          {
+            if( isTypingLeft ){
+                <div className='chat-left'>
+                  "...typing"
+                </div>
+              }
+            if ( isTypingRight ){
+                <div className='chat-right'>
+                  "...typing"
+                </div>
+              }
+            }
         </div>
+
         <input type='text' onChange={handleChange} value={message}/>
         <button type='button' onClick={addToArray}>send</button>
       </div>

@@ -3,17 +3,17 @@ import data from './data';
 import SingleQuestion from './Question';
 function App() {
   const [questions, setQuestions] = useState(data);
+  const [userMessages, setUserMessages] = useState([]);
+  const handleChange = (event) => {
+    let temp = event.target.value;
+    let temp2 = [...userMessages,temp];
+    console.log(temp2);
+  }
   return (
     <main>
-      <div className='container'>
-        <h3>questions and answers about login</h3>
-        <section className='info'>
-          {questions.map((question) => {
-            return (
-              <SingleQuestion key={question.id} {...question}></SingleQuestion>
-            );
-          })}
-        </section>
+      <div>
+        <input type='text' onChange={handleChange} />
+        <button type='button'>send</button>
       </div>
     </main>
   );

@@ -1,6 +1,13 @@
 import React, { useState , useEffect } from 'react';
 import data from './data';
 import SingleQuestion from './Question';
+import { OpenAI } from "langchain/llms/openai";
+
+const llm = new OpenAI({
+  openAIApiKey: "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",
+  temperature: 0.9,
+});
+
 function App() {
   const [message, setMessage] = useState('');
   const [userMessages, setUserMessages] = useState([]);
@@ -13,7 +20,9 @@ function App() {
     setMessage('');
    }, [userMessages])
   const addToArray2 = async () => {
-    await setUserMessages(userMessages => [...userMessages,{message:"Lorem ipsum dolor sit amettas tristique. ",isReply:true}]);
+
+    const llmResult = await llm.predict(message);
+    await setUserMessages(userMessages => [...userMessages,{message:llmResult,isReply:true}]);
     await setIsTypingRight(false)
   }
   const addToArray = async () => {

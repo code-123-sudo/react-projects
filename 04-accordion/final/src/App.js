@@ -87,14 +87,20 @@ function App() {
             {userMessages.map((value) => {
               if (!value.isReply) {
                 return (
-                  <div className='chat-left'>
-                    {value.text}
+                  <div className="chatLeftContainer">
+                    <div className="user"></div>
+                    <div className='chat-left'>
+                      {value.text}
+                    </div>
                   </div>
                   )
               }else {
                 return (
-                  <div className='chat-right'>
-                    {value.text}
+                  <div className="chatLeftContainer">
+                    <div className="user"></div>
+                    <div className='chat-right'>
+                      {value.text}
+                    </div>
                   </div>
                 )
               }

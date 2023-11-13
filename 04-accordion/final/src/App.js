@@ -1,11 +1,11 @@
 import React, { useState , useEffect } from 'react';
-import data from './data';
-import SingleQuestion from './Question';
 import { OpenAI } from "langchain/llms/openai";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const llm = new OpenAI({
-  openAIApiKey: "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",
-  temperature: 0.9,
+  openAIApiKey: "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",
+  temperature: 0,
 });
 
 function App() {
@@ -13,38 +13,59 @@ function App() {
   const [userMessages, setUserMessages] = useState([]);
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
+  
   const handleChange = (event) => {
     setMessage(event.target.value)
   }
+
   useEffect(() => { console.log(userMessages)
     setMessage('');
    }, [userMessages])
-  const addToArray2 = async () => {
 
+  const addToArray2 = async () => {
+    try {
+    await setIsTypingRight(true);
     const llmResult = await llm.predict(message);
-    await setUserMessages(userMessages => [...userMessages,{message:llmResult,isReply:true}]);
-    await setIsTypingRight(false)
+     console.log(llmResult)
+     console.log(message)
+    await setIsTypingRight(false);
+    await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
+   // await setIsTypingRight(false)
+    } catch(error) {
+      await setIsTypingRight(false);
+      toast("something went wrong");
+      console.log(error)
+    }
   }
   const addToArray = async () => {
-    await setIsTypingRight(true)
-    await setUserMessages(userMessages => [...userMessages,{message:message,isReply:false}]);
-    setTimeout(addToArray2,1000)
+    
+    await setUserMessages(userMessages => [...userMessages,{text:message,isReply:false}]);
+    //setTimeout(addToArray2,1000)
+    addToArray2();
   }
+
+  const onKeyDownHandler = e => {
+    if (e.keyCode === 13) {
+      addToArray();
+    }
+  };
+
   return (
     <main>
       <div>
+        <ToastContainer />
         <div className='chat-container'>
           {userMessages.map((value) => {
             if (!value.isReply) {
               return (
                 <div className='chat-left'>
-                  {value.message}
+                  {value.text}
                 </div>
                 )
             }else {
               return (
                 <div className='chat-right'>
-                  {value.message}
+                  {value.text}
                 </div>
               )
             }
@@ -63,7 +84,7 @@ function App() {
             }
         </div>
 
-        <input type='text' onChange={handleChange} value={message}/>
+        <input type='text' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
         <button type='button' onClick={addToArray}>send</button>
       </div>
     </main>

@@ -157,12 +157,11 @@ main {
 }
 
 .chat-right {
-  margin-left: 469px;
   border-radius: 24px;
   padding: 20px;
   border: 4px solid white;
   width: max-content;
-  background: #87CEEB;
+  background: #90ee90;
 }
 
 input {

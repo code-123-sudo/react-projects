@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // });
 
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+   openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -99,6 +99,7 @@ function App() {
                 )
               }
           })}
+          <div className='scroll-point' ref={messagesEndRef} />
             {
               isTypingLeft &&
                   <div className='chat-left'>
@@ -120,7 +121,6 @@ function App() {
             <input type='text' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
           </div>
           <button  type='button' onClick={addToArray}>send</button>
-            <div className='scroll-point' ref={messagesEndRef} />
         </div>
         </div>
     </div>

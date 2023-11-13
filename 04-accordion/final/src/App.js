@@ -2,6 +2,7 @@ import React, { useState , useEffect , useRef } from 'react';
 import { OpenAI } from "langchain/llms/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
+import data from './data.js'
 import 'react-toastify/dist/ReactToastify.css';
 
 // const llm = new OpenAI({
@@ -10,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // });
 
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+   openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -35,11 +36,14 @@ function App() {
     try {
     await setIsTypingRight(true);
     scrollToBottom();
+    console.log("=======1==========")
+    console.log(data)
+    console.log("========2========")
     const finalMessage = message + "Reply in a maximum of 20 words";
     // const chatModelResult = await chatModel.predict(text);
     const llmResult = await chatModel.predict(finalMessage);
-     console.log(llmResult)
-     console.log(message)
+    console.log(llmResult)
+    console.log(message)
     await setIsTypingRight(false);
     await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
    // await setIsTypingRight(false)

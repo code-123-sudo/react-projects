@@ -1,21 +1,26 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState , useEffect , useRef } from 'react';
 import { OpenAI } from "langchain/llms/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const llm = new OpenAI({
-  openAIApiKey: "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",
+// const llm = new OpenAI({
+//   openAIApiKey: "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",
+//   temperature: 0,
+// });
+
+const chatModel = new ChatOpenAI({
+   openAIApiKey: "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",
   temperature: 0,
 });
-
-const chatModel = new ChatOpenAI();
 
 function App() {
   const [message, setMessage] = useState('');
   const [userMessages, setUserMessages] = useState([]);
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
+
+  let messagesEndRef = useRef(null);
   
   const handleChange = (event) => {
     setMessage(event.target.value)
@@ -23,13 +28,15 @@ function App() {
 
   useEffect(() => { console.log(userMessages)
     setMessage('');
+    scrollToBottom();
    }, [userMessages])
 
   const addToArray2 = async () => {
     try {
     await setIsTypingRight(true);
+    const finalMessage = message + "Reply in a maximum of 20 words";
     // const chatModelResult = await chatModel.predict(text);
-    const llmResult = await chatModel.predict(message);
+    const llmResult = await chatModel.predict(finalMessage);
      console.log(llmResult)
      console.log(message)
     await setIsTypingRight(false);
@@ -53,6 +60,12 @@ function App() {
       addToArray();
     }
   };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }
+
+
 
   return (
     <main>
@@ -89,8 +102,10 @@ function App() {
         </div>
 
         <input type='text' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
-        <button type='button' onClick={addToArray}>send</button>
+        <button  type='button' onClick={addToArray}>send</button>
+        <div className='scroll-point' ref={messagesEndRef} />
       </div>
+   
     </main>
   );
 }

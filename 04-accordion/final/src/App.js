@@ -1,12 +1,15 @@
 import React, { useState , useEffect } from 'react';
 import { OpenAI } from "langchain/llms/openai";
+import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const llm = new OpenAI({
-  openAIApiKey: "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",
+  openAIApiKey: "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",
   temperature: 0,
 });
+
+const chatModel = new ChatOpenAI();
 
 function App() {
   const [message, setMessage] = useState('');
@@ -25,7 +28,8 @@ function App() {
   const addToArray2 = async () => {
     try {
     await setIsTypingRight(true);
-    const llmResult = await llm.predict(message);
+    // const chatModelResult = await chatModel.predict(text);
+    const llmResult = await chatModel.predict(message);
      console.log(llmResult)
      console.log(message)
     await setIsTypingRight(false);

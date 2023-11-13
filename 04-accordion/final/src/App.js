@@ -34,6 +34,7 @@ function App() {
   const addToArray2 = async () => {
     try {
     await setIsTypingRight(true);
+    scrollToBottom();
     const finalMessage = message + "Reply in a maximum of 20 words";
     // const chatModelResult = await chatModel.predict(text);
     const llmResult = await chatModel.predict(finalMessage);

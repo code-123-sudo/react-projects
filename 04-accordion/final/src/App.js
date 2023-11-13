@@ -20,7 +20,7 @@ function App() {
   const [userMessages, setUserMessages] = useState([]);
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
-  const [foundInCache,setFoundInCache] = useState(false);
+  let foundInCache = false;
   let messagesEndRef = useRef(null);
   
   const handleChange = (event) => {
@@ -40,21 +40,18 @@ function App() {
         if ( quesAns.question == message ) {
           setUserMessages(userMessages => [...userMessages,{text:quesAns.answer,isReply:true}]);
           setIsTypingRight(false);
-          setFoundInCache(true);
+          foundInCache = true;
           return;
         }
       })
-      console.log("======1=======")
-      console.log(foundInCache)
-      console.log("======2=======")
-      if (isTypingRight){
+      if (!foundInCache){
         const finalMessage = message + "Reply in a maximum of 20 words";
         const llmResult = await chatModel.predict(finalMessage);
         await setIsTypingRight(false);
         await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
-        setFoundInCache(false);
+        foundInCache = false;
       }
-      setFoundInCache(false);
+      foundInCache=false;
     } 
     catch(error) {
       await setIsTypingRight(false);

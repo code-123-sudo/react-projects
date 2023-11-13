@@ -146,6 +146,8 @@ main {
   display: flex;
   flex-direction: column;
   width : 800px;
+  max-height: 77vh;
+  overflow: scroll;
 }
 .chat-left {
   justify-content: flex-start;

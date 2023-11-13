@@ -20,7 +20,7 @@ function App() {
   const [userMessages, setUserMessages] = useState([]);
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
-
+  const [foundInCache,setFoundInCache] = useState(false);
   let messagesEndRef = useRef(null);
   
   const handleChange = (event) => {
@@ -34,25 +34,34 @@ function App() {
 
   const addToArray2 = async () => {
     try {
-    await setIsTypingRight(true);
-    scrollToBottom();
-    console.log("=======1==========")
-    console.log(data)
-    console.log("========2========")
-    const finalMessage = message + "Reply in a maximum of 20 words";
-    // const chatModelResult = await chatModel.predict(text);
-    const llmResult = await chatModel.predict(finalMessage);
-    console.log(llmResult)
-    console.log(message)
-    await setIsTypingRight(false);
-    await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
-   // await setIsTypingRight(false)
-    } catch(error) {
+      await setIsTypingRight(true);
+      scrollToBottom();
+      data.forEach( (quesAns) => {
+        if ( quesAns.question == message ) {
+          setUserMessages(userMessages => [...userMessages,{text:quesAns.answer,isReply:true}]);
+          setIsTypingRight(false);
+          setFoundInCache(true);
+          return;
+        }
+      })
+      console.log("======1=======")
+      console.log(foundInCache)
+      console.log("======2=======")
+      if (isTypingRight){
+        const finalMessage = message + "Reply in a maximum of 20 words";
+        const llmResult = await chatModel.predict(finalMessage);
+        await setIsTypingRight(false);
+        await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
+        setFoundInCache(false);
+      }
+      setFoundInCache(false);
+    } 
+    catch(error) {
       await setIsTypingRight(false);
       toast("something went wrong");
-      console.log(error)
     }
   }
+
   const addToArray = async () => {
     
     await setUserMessages(userMessages => [...userMessages,{text:message,isReply:false}]);

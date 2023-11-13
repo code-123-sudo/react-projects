@@ -11,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // });
 
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+   openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -79,45 +79,51 @@ function App() {
 
 
   return (
-    <main>
-      <div>
-        <ToastContainer />
-        <div className='chat-container'>
-          {userMessages.map((value) => {
-            if (!value.isReply) {
-              return (
-                <div className='chat-left'>
-                  {value.text}
-                </div>
+    <div>
+      <main>
+        <div>
+          <ToastContainer />
+          <div className='chat-container'>
+            {userMessages.map((value) => {
+              if (!value.isReply) {
+                return (
+                  <div className='chat-left'>
+                    {value.text}
+                  </div>
+                  )
+              }else {
+                return (
+                  <div className='chat-right'>
+                    {value.text}
+                  </div>
                 )
-            }else {
-              return (
-                <div className='chat-right'>
-                  {value.text}
-                </div>
-              )
-            }
-        })}
-          {
-            isTypingLeft &&
-                <div className='chat-left'>
-                  ...typing
-                </div>
-            }
+              }
+          })}
             {
-             isTypingRight &&
-                <div className='chat-right'>
-                  ...typing
-                </div>
-            }
+              isTypingLeft &&
+                  <div className='chat-left'>
+                    ...typing
+                  </div>
+              }
+              {
+               isTypingRight &&
+                  <div className='chat-right'>
+                    ...typing
+                  </div>
+              }
+          </div>
         </div>
-
-        <input type='text' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
-        <button  type='button' onClick={addToArray}>send</button>
-        <div className='scroll-point' ref={messagesEndRef} />
-      </div>
-   
-    </main>
+      </main>
+       <div className="flexRowContainer">
+        <div className="flexRow">
+          <div className="inputContainer">
+            <input type='text' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
+          </div>
+          <button  type='button' onClick={addToArray}>send</button>
+            <div className='scroll-point' ref={messagesEndRef} />
+        </div>
+        </div>
+    </div>
   );
 }
 

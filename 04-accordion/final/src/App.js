@@ -88,7 +88,7 @@ function App() {
               if (!value.isReply) {
                 return (
                   <div className="chatLeftContainer">
-                    <div className="user"></div>
+                    <div className="user">S</div>
                     <div className='chat-left'>
                       {value.text}
                     </div>
@@ -97,7 +97,7 @@ function App() {
               }else {
                 return (
                   <div className="chatLeftContainer">
-                    <div className="user"></div>
+                    <div className="user">A</div>
                     <div className='chat-right'>
                       {value.text}
                     </div>

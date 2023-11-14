@@ -87,6 +87,7 @@ function App() {
         <img src={menu} className="iconImg" />
       </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
+        <div className="newChatButton">New Chat +</div>
       </div>
       <div className= { isHamburger ? 'chatBox' : 'chatBox2' }>
         <div className="parentDiv">

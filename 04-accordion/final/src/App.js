@@ -21,6 +21,7 @@ function App() {
   const [userMessages, setUserMessages] = useState([]);
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
+  const [isHamburger,setIsHamburger] = useState(false);
   let foundInCache = false;
   let messagesEndRef = useRef(null);
   
@@ -81,9 +82,9 @@ function App() {
 
   return (
     <div className="topDiv">
-      <div className="hamburger">
+      <div className={ isHamburger ? 'hamburger' : 'hamburger2'} >
       </div>
-      <div className="chatbox">
+      <div className= { isHamburger ? 'chatbox' : 'chatbox2' }>
         <div className="parentDiv">
         <div>
           <ToastContainer />

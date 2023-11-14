@@ -124,7 +124,7 @@ function App() {
        <div className="flexRowContainer">
         <div className="flexRow">
           <div className="inputContainer">
-            <input type='text' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
+            <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
           </div>
           <button  type='button' onClick={addToArray}>send</button>
         </div>

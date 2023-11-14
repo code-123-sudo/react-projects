@@ -80,8 +80,11 @@ function App() {
 
 
   return (
-    <div>
-      <main>
+    <div className="topDiv">
+      <div className="hamburger">
+      </div>
+      <div className="chatbox">
+        <div className="parentDiv">
         <div>
           <ToastContainer />
           <div className='chat-container'>
@@ -127,15 +130,16 @@ function App() {
               }
           </div>
         </div>
-      </main>
-       <div className="flexRowContainer">
-        <div className="flexRow">
-          <div className="inputContainer">
-            <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
+        </div>
+        <div className="flexRowContainer">
+          <div className="flexRow">
+            <div className="inputContainer">
+              <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
+            </div>
+            <div className="icon" onClick={addToArray}> <img src={send} /> </div>
           </div>
-          <div className="icon" onClick={addToArray}> <img src={send} /> </div>
         </div>
-        </div>
+      </div>
     </div>
   );
 }

@@ -133,7 +133,7 @@ function App() {
           <div className="inputContainer">
             <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
           </div>
-          <div onClick={addToArray}> <img src={send} /> </div>
+          <div className="icon" onClick={addToArray}> <img src={send} /> </div>
         </div>
         </div>
     </div>

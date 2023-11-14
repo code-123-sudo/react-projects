@@ -201,6 +201,9 @@ main {
   justify-content: center;
   align-items: center;
 }
+.icon {
+  margin-left: -54px;
+}
 
 input {
   width : 700px;

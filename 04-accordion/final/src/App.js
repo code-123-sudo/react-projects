@@ -84,9 +84,9 @@ function App() {
   return (
     <div className="topDiv">
       <div className="menuButton" onClick={() => {setIsHamburger(!isHamburger)}}>
-        <img src={menu} />
+        <img src={menu} className="iconImg" />
       </div>
-      <div className={ isHamburger ? 'hamburger' : 'hamburger2'} >
+      <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
       </div>
       <div className= { isHamburger ? 'chatBox' : 'chatBox2' }>
         <div className="parentDiv">

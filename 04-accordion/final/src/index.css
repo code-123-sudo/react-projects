@@ -139,11 +139,15 @@ Questions
   height : 100vh;
   width : 200px;
   background: grey;
+  margin-left: 0px;
+  transition: 1.2s cubic-bezier(.36,-0.01,0,.77);
 }
+
 
 .hamburger2 {
   height: 100vh;
-  width: 0px;
+  margin-left: -200px;
+  background: grey;
 }
 
 main {
@@ -262,10 +266,16 @@ button :: hover {
 .menuButton {
   top: 10;
   left : 10;
-  width : 100px;
-  height : 100px;
+  width : 50px;
+  height : 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: fixed;
+  cursor: pointer;
+}
+
+.iconImg{
+  height : 30px;
+  width : 30px;
 }

@@ -108,22 +108,22 @@ function App() {
           })}
           <div className='scroll-point' ref={messagesEndRef} />
             {
-              isTypingLeft &&
-                <>
+              !isTypingLeft &&
+                <div className="chatLeftContainer">
                   <div className="user">Assistant</div>
                   <div className='chat-left'>
                     ...typing
                   </div>
-                </>
+                </div>
               }
               {
-               isTypingRight &&
-                <>
+               !isTypingRight &&
+               <div className="chatLeftContainer">
                   <div className="user">Assistant</div>
                   <div className='chat-right'>
                     ...typing
                   </div>
-                </>
+                </div>
               }
           </div>
         </div>

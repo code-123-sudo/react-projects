@@ -141,6 +141,11 @@ Questions
   background: grey;
 }
 
+.hamburger2 {
+  height: 100vh;
+  width: 0px;
+}
+
 main {
   min-height: 100vh;
   background: pink;
@@ -208,6 +213,12 @@ main {
   width: calc(100% - 200px);
 }
 
+.chatBox2 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .parentDiv{
   display: flex;
   justify-content: center;
@@ -246,4 +257,15 @@ button {
 
 button :: hover {
   cursor : pointer
+}
+
+.menuButton {
+  top: 10;
+  left : 10;
+  width : 100px;
+  height : 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
 }

@@ -4,7 +4,8 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
 import data from './data.js'
 import 'react-toastify/dist/ReactToastify.css';
-import send from './assets/send.png';
+import send from './assets/send.png'
+import menu from './assets/menu.png';
 
 // const llm = new OpenAI({
 //   openAIApiKey: "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",
@@ -82,9 +83,12 @@ function App() {
 
   return (
     <div className="topDiv">
+      <div className="menuButton" onClick={() => {setIsHamburger(!isHamburger)}}>
+        <img src={menu} />
+      </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger2'} >
       </div>
-      <div className= { isHamburger ? 'chatbox' : 'chatbox2' }>
+      <div className= { isHamburger ? 'chatBox' : 'chatBox2' }>
         <div className="parentDiv">
         <div>
           <ToastContainer />

@@ -190,10 +190,6 @@ main {
   margin-top: 100px;
 }
 
-.inputContainer {
-  position: sticky;
-}
-
 .flexRow{
   display: flex;
   flex-direction: row;

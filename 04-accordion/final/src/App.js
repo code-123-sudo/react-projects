@@ -4,6 +4,7 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
 import data from './data.js'
 import 'react-toastify/dist/ReactToastify.css';
+import send from './assets/send.png';
 
 // const llm = new OpenAI({
 //   openAIApiKey: "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",
@@ -108,15 +109,21 @@ function App() {
           <div className='scroll-point' ref={messagesEndRef} />
             {
               isTypingLeft &&
+                <>
+                  <div className="user">Assistant</div>
                   <div className='chat-left'>
                     ...typing
                   </div>
+                </>
               }
               {
                isTypingRight &&
+                <>
+                  <div className="user">Assistant</div>
                   <div className='chat-right'>
                     ...typing
                   </div>
+                </>
               }
           </div>
         </div>
@@ -125,8 +132,8 @@ function App() {
         <div className="flexRow">
           <div className="inputContainer">
             <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
-             <button  type='button' onClick={addToArray}>send</button>
           </div>
+          <div onClick={addToArray}> <img src={send} /> </div>
         </div>
         </div>
     </div>

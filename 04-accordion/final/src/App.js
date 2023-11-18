@@ -13,7 +13,7 @@ import menu from './assets/menu.png';
 // });
 
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+   openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -23,6 +23,7 @@ function App() {
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
   const [isHamburger,setIsHamburger] = useState(false);
+  const [isHamburgerAnimate,setIsHamburgerAnimate] = useState(false);
   let foundInCache = false;
   let messagesEndRef = useRef(null);
   
@@ -48,7 +49,7 @@ function App() {
         }
       })
       if (!foundInCache){
-        const finalMessage = message + "Reply in a maximum of 20 words";
+        const finalMessage = message + "Reply in a maximum of 100 words. Always reply in Hindi with English characters";
         const llmResult = await chatModel.predict(finalMessage);
         await setIsTypingRight(false);
         await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
@@ -83,13 +84,13 @@ function App() {
 
   return (
     <div className="topDiv">
-      <div className="menuButton" onClick={() => {setIsHamburger(!isHamburger)}}>
+      <div className="menuButton" onClick={() => {setIsHamburger(!isHamburger);setIsHamburgerAnimate(!isHamburgerAnimate)}}>
         <img src={menu} className="iconImg" />
       </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
         <div className="newChatButton">New Chat +</div>
       </div>
-      <div className= { isHamburger ? 'chatBox' : 'chatBox2' }>
+      <div className= { isHamburgerAnimate ? 'chatBox' : 'chatBox2' }>
         <div className="parentDiv">
         <div>
           <ToastContainer />

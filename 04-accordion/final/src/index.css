@@ -196,18 +196,6 @@ main {
   margin-top: 100px;
 }
 
-.chatBox {
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 200px);
-}
-
-.chatBox2 {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
 .parentDiv{
   display: flex;
   justify-content: center;
@@ -277,6 +265,18 @@ button :: hover {
   cursor: pointer;
 }
 
+.chatBox {
+  display: flex;
+  flex-direction: column;
+  /*width: calc(100% - 200px);*/
+  flex-basis: calc(100% - 200px);
+}
+
+.chatBox2 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 
 .hamburger {
   height : 100vh;
@@ -286,7 +286,8 @@ button :: hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: 1.2s cubic-bezier(.36,-0.01,0,.77);
+ /* transition: 0.2s cubic-bezier(.36,-0.01,0,.77);*/
+ /*transition: 0.2s;*/
 }
 
 

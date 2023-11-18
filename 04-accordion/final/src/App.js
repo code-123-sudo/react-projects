@@ -90,7 +90,7 @@ function App() {
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
         <div className="newChatButton">New Chat +</div>
       </div>
-      <div className= { isHamburgerAnimate ? 'chatBox' : 'chatBox2' }>
+      <div className= {"chatBox " +  (isHamburgerAnimate ? 'chatBox2' : null) }>
         <div className="parentDiv">
         <div>
           <ToastContainer />

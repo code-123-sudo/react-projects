@@ -13,7 +13,7 @@ import menu from './assets/menu.png';
 // });
 
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+   openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -50,6 +50,36 @@ function App() {
       })
       if (!foundInCache){
         const finalMessage = message + "Reply in a maximum of 100 words. Always reply in Hindi with English characters";
+
+
+
+        // const llmResult = await chatModel.createCompletion({
+        //   model: "text-davinci-003",
+        //   prompt: "hello world",
+        //   max_tokens: 100,
+        //   temperature: 0,
+        //   stream: true,
+        // }, { responseType: 'stream' });
+
+        // console.log(llmResult)
+
+        
+        // llmResult.data.on('data', data => {
+        //     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
+        //     console.log("______1_________")
+        //     console.log(lines)
+        //     console.log("______2_________")
+            // for (const line of lines) {
+                // const message = line.replace(/^data: /, '');
+                // if (message === '[DONE]') {
+                    // res.end();
+                    // return
+                // }
+                // const parsed = JSON.parse(message);
+                // res.write(`data: ${parsed.choices[0].text}\n\n`)
+            // }
+          // });
+
         const llmResult = await chatModel.predict(finalMessage);
         await setIsTypingRight(false);
         await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);

@@ -64,7 +64,9 @@ function App() {
           content: finalMessage
         }, { responseType: 'stream' });
 
-       
+        for await (const chunk of llmResult) {
+          console.log(chunk)
+        }
           // console.log(chunk); // This correctly streams it in the terminal 
       
 

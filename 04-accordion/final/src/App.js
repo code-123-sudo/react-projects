@@ -8,7 +8,7 @@ import send from './assets/send.png'
 import menu from './assets/menu.png';
 
 const chatModel = new ChatOpenAI({
-  openAIApiKey: "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",
+  openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -37,19 +37,21 @@ function App() {
     })
   }
 
-  useEffect(() => { console.log(chatMessages)
-    setMessage('');
-    scrollToBottom();
-   }, [chatMessages])
+  useEffect(() => {
+      setMessage('');
+      scrollToBottom();
+    },[chatMessages])
 
   const addAiAnswerToChat = async () => {
     try {
       await setIsTypingRight(true);
       scrollToBottom();
 
+      // first search in cache for the user question
       searchInCache();
 
       if (!foundInCache){
+      // if not found in cache , get answer from open chat ai
         const finalMessage = message + "Reply in a maximum of 100 words. Always reply in Hindi with English characters";
         const llmResult = await chatModel.predict({
           model: "text-davinci-003",
@@ -59,12 +61,31 @@ function App() {
           content: finalMessage
         }, { responseType: 'stream' });
 
+        let str = "";
         for await (const chunk of llmResult) {
-          console.log(chunk); // This correctly streams it in the terminal 
+          if ( str.length == 0 ) {
+            console.log("inside this")
+            setChatMessages(chatMessages => [...chatMessages,{text:str,isReply:true}]);
+            str+= chunk;
+          }
+          else {
+            console.log("inside that")
+            let temp = [];
+            for ( let i = 0 ; i < chatMessages.length - 1; i++ ) {
+              temp[i] = chatMessages[i];
+            }
+            str += chunk;
+            setChatMessages(chatMessages => [...temp,{text:str,isReply:true}])
+            console.log("===1===")
+            console.log(chatMessages)
+            console.log("====2=====")
+          }
+          // console.log(chunk); // This correctly streams it in the terminal 
         }
+        str = ''
 
         await setIsTypingRight(false);
-        await setChatMessages(chatMessages => [...chatMessages,{text:llmResult,isReply:true}]);
+        // await setChatMessages(chatMessages => [...chatMessages,{text:llmResult,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;
@@ -81,7 +102,7 @@ function App() {
     addAiAnswerToChat();
   }
 
-  const onKeyDownHandler = e => {
+  const enterKeySend = e => {
     if (e.keyCode === 13) {
       addUserQuestionToChat();
     }
@@ -150,7 +171,7 @@ function App() {
         <div className="flexRowContainer">
           <div className="flexRow">
             <div className="inputContainer">
-              <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
+              <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={enterKeySend} onChange={handleChange} value={message}/>
             </div>
             <div className="icon" onClick={addUserQuestionToChat}> <img src={send} /> </div>
           </div>

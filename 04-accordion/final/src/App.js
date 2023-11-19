@@ -4,11 +4,14 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
 import data from './data.js'
 import 'react-toastify/dist/ReactToastify.css';
+
+import { API_KEY } from "./constants.js"
+
 import send from './assets/send.png'
 import menu from './assets/menu.png';
 
 const chatModel = new ChatOpenAI({
-  openAIApiKey: "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",
+  openAIApiKey: API_KEY,
   temperature: 0,
 });
 
@@ -61,31 +64,12 @@ function App() {
           content: finalMessage
         }, { responseType: 'stream' });
 
-        let str = "";
-        for await (const chunk of llmResult) {
-          if ( str.length == 0 ) {
-            console.log("inside this")
-            setChatMessages(chatMessages => [...chatMessages,{text:str,isReply:true}]);
-            str+= chunk;
-          }
-          else {
-            console.log("inside that")
-            let temp = [];
-            for ( let i = 0 ; i < chatMessages.length - 1; i++ ) {
-              temp[i] = chatMessages[i];
-            }
-            str += chunk;
-            setChatMessages(chatMessages => [...temp,{text:str,isReply:true}])
-            console.log("===1===")
-            console.log(chatMessages)
-            console.log("====2=====")
-          }
+       
           // console.log(chunk); // This correctly streams it in the terminal 
-        }
-        str = ''
+      
 
         await setIsTypingRight(false);
-        // await setChatMessages(chatMessages => [...chatMessages,{text:llmResult,isReply:true}]);
+        await setChatMessages(chatMessages => [...chatMessages,{text:llmResult,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;

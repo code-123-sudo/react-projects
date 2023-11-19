@@ -7,15 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import send from './assets/send.png'
 import menu from './assets/menu.png';
 
-
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+  openAIApiKey: "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",
   temperature: 0,
 });
 
 function App() {
   const [message, setMessage] = useState('');
-  const [userMessages, setUserMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
   const [isHamburger,setIsHamburger] = useState(false);
@@ -27,31 +26,33 @@ function App() {
     setMessage(event.target.value)
   }
 
-  useEffect(() => { console.log(userMessages)
-    setMessage('');
-    scrollToBottom();
-   }, [userMessages])
-
-  const addToArray2 = async () => {
-    try {
-      await setIsTypingRight(true);
-      scrollToBottom();
-      data.forEach( (quesAns) => {
+  const searchInCache = () => {
+    data.forEach( (quesAns) => {
         if ( quesAns.question == message ) {
-          setUserMessages(userMessages => [...userMessages,{text:quesAns.answer,isReply:true}]);
+          setChatMessages(chatMessages => [...chatMessages,{text:quesAns.answer,isReply:true}]);
           setIsTypingRight(false);
           foundInCache = true;
           return;
         }
-      })
+    })
+  }
+
+  useEffect(() => { console.log(chatMessages)
+    setMessage('');
+    scrollToBottom();
+   }, [chatMessages])
+
+  const addAiAnswerToChat = async () => {
+    try {
+      await setIsTypingRight(true);
+      scrollToBottom();
+
+      searchInCache();
+
       if (!foundInCache){
         const finalMessage = message + "Reply in a maximum of 100 words. Always reply in Hindi with English characters";
-
-
-
         const llmResult = await chatModel.predict({
-           model: "text-davinci-003",
-          // prompt: finalMessage,
+          model: "text-davinci-003",
           max_tokens: 100,
           temperature: 0,
           stream: true,
@@ -63,7 +64,7 @@ function App() {
         }
 
         await setIsTypingRight(false);
-        await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
+        await setChatMessages(chatMessages => [...chatMessages,{text:llmResult,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;
@@ -75,24 +76,20 @@ function App() {
     }
   }
 
-  const addToArray = async () => {
-    
-    await setUserMessages(userMessages => [...userMessages,{text:message,isReply:false}]);
-    //setTimeout(addToArray2,1000)
-    addToArray2();
+  const addUserQuestionToChat = async () => { 
+    await setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+    addAiAnswerToChat();
   }
 
   const onKeyDownHandler = e => {
     if (e.keyCode === 13) {
-      addToArray();
+      addUserQuestionToChat();
     }
   };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
-
-
 
   return (
     <div className="topDiv">
@@ -107,7 +104,7 @@ function App() {
         <div>
           <ToastContainer />
           <div className='chat-container'>
-            {userMessages.map((value) => {
+            {chatMessages.map((value) => {
               if (!value.isReply) {
                 return (
                   <div className="chatLeftContainer">
@@ -155,7 +152,7 @@ function App() {
             <div className="inputContainer">
               <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={onKeyDownHandler} onChange={handleChange} value={message}/>
             </div>
-            <div className="icon" onClick={addToArray}> <img src={send} /> </div>
+            <div className="icon" onClick={addUserQuestionToChat}> <img src={send} /> </div>
           </div>
         </div>
       </div>

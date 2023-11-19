@@ -13,7 +13,7 @@ import menu from './assets/menu.png';
 // });
 
 const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
+   openAIApiKey: "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",
   temperature: 0,
 });
 
@@ -53,19 +53,19 @@ function App() {
 
 
 
-        // const llmResult = await chatModel.createCompletion({
-        //   model: "text-davinci-003",
-        //   prompt: "hello world",
-        //   max_tokens: 100,
-        //   temperature: 0,
-        //   stream: true,
-        // }, { responseType: 'stream' });
+        const llmResult = await chatModel.predict({
+           model: "text-davinci-003",
+          prompt: finalMessage,
+          max_tokens: 100,
+          temperature: 0,
+          stream: true,
+          content: ""
+        }, { responseType: 'stream' });
 
-        // console.log(llmResult)
+        console.log(llmResult)
 
         
         // llmResult.data.on('data', data => {
-        //     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
         //     console.log("______1_________")
         //     console.log(lines)
         //     console.log("______2_________")
@@ -80,7 +80,7 @@ function App() {
             // }
           // });
 
-        const llmResult = await chatModel.predict(finalMessage);
+        // const llmResult = await chatModel.predict(finalMessage);
         await setIsTypingRight(false);
         await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
         foundInCache = false;
@@ -89,6 +89,7 @@ function App() {
     } 
     catch(error) {
       await setIsTypingRight(false);
+      console.log(error)
       toast("something went wrong");
     }
   }

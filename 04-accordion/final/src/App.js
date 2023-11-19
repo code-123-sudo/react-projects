@@ -12,10 +12,10 @@ import menu from './assets/menu.png';
 //   temperature: 0,
 // });
 
-const chatModel = new ChatOpenAI({
-   openAIApiKey: "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",
-  temperature: 0,
-});
+// const chatModel = new ChatOpenAI({
+//    openAIApiKey: "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",
+//   temperature: 0,
+// });
 
 function App() {
   const [message, setMessage] = useState('');
@@ -53,36 +53,61 @@ function App() {
 
 
 
-        const llmResult = await chatModel.predict({
-           model: "text-davinci-003",
-          prompt: finalMessage,
-          max_tokens: 100,
-          temperature: 0,
-          stream: true,
-          content: ""
-        }, { responseType: 'stream' });
+        // const llmResult = await chatModel.predict({
+        //    model: "text-davinci-003",
+        //   // prompt: finalMessage,
+        //   max_tokens: 100,
+        //   temperature: 0,
+        //   stream: true,
+        //   content: finalMessage
+        // }, { responseType: 'stream' });
 
-        console.log(llmResult)
+        // console.log(llmResult)
+          const response = await ChatOpenAI.completions.create({
+            openAIApiKey: "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",
+            model: "gpt-4",
+            messages: [
+              {
+                role: "system",
+                content: finalMessage,
+              },
+            ],
+            stream: true,
+            temperature: 1.1,
+            max_tokens: 600,
+            top_p: 1,
+            frequency_penalty: 0.3,
+            presence_penalty: 0.5,
+          });
 
-        
-        // llmResult.data.on('data', data => {
-        //     console.log("______1_________")
-        //     console.log(lines)
-        //     console.log("______2_________")
-            // for (const line of lines) {
-                // const message = line.replace(/^data: /, '');
-                // if (message === '[DONE]') {
-                    // res.end();
-                    // return
-                // }
-                // const parsed = JSON.parse(message);
-                // res.write(`data: ${parsed.choices[0].text}\n\n`)
-            // }
-          // });
+  for await (const chunk of response) {
+    console.log(chunk.choices[0].delta.content); // This correctly streams it in the terminal 
+  }
 
-        // const llmResult = await chatModel.predict(finalMessage);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         await setIsTypingRight(false);
-        await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
+        await setUserMessages(userMessages => [...userMessages,{text:"",isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;

@@ -18,6 +18,10 @@ const chatModel = new ChatOpenAI({
 function App() {
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
+  
+  const [isStreaming,setIsStreaming] = useState('');
+  const [streamData,setStreamData] = useState();
+
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
   const [isHamburger,setIsHamburger] = useState(false);
@@ -64,14 +68,18 @@ function App() {
           content: finalMessage
         }, { responseType: 'stream' });
 
+        let str = ""
+        await setIsStreaming(true);
         for await (const chunk of llmResult) {
           console.log(chunk)
+          str += chunk;
+          await setStreamData(str)
         }
           // console.log(chunk); // This correctly streams it in the terminal 
       
-
+        await setIsStreaming(false)
         await setIsTypingRight(false);
-        await setChatMessages(chatMessages => [...chatMessages,{text:llmResult,isReply:true}]);
+        await setChatMessages(chatMessages => [...chatMessages,{text:str,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;
@@ -152,6 +160,19 @@ function App() {
                 </div>
               }
           </div>
+           
+            {
+              isStreaming &&
+                <div className="chatLeftContainer">
+                  <div className="user">Assistant</div>
+                  <div className='chat-right'>
+                    {streamData}
+                  </div>
+                </div>
+              }
+              
+      
+
         </div>
         </div>
         <div className="flexRowContainer">

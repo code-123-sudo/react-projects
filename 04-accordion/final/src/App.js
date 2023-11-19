@@ -7,15 +7,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import send from './assets/send.png'
 import menu from './assets/menu.png';
 
-// const llm = new OpenAI({
-//   openAIApiKey: "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",
-//   temperature: 0,
-// });
 
-// const chatModel = new ChatOpenAI({
-//    openAIApiKey: "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",
-//   temperature: 0,
-// });
+const chatModel = new ChatOpenAI({
+   openAIApiKey: "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",
+  temperature: 0,
+});
 
 function App() {
   const [message, setMessage] = useState('');
@@ -53,61 +49,21 @@ function App() {
 
 
 
-        // const llmResult = await chatModel.predict({
-        //    model: "text-davinci-003",
-        //   // prompt: finalMessage,
-        //   max_tokens: 100,
-        //   temperature: 0,
-        //   stream: true,
-        //   content: finalMessage
-        // }, { responseType: 'stream' });
+        const llmResult = await chatModel.predict({
+           model: "text-davinci-003",
+          // prompt: finalMessage,
+          max_tokens: 100,
+          temperature: 0,
+          stream: true,
+          content: finalMessage
+        }, { responseType: 'stream' });
 
-        // console.log(llmResult)
-          const response = await ChatOpenAI.completions.create({
-            openAIApiKey: "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",
-            model: "gpt-4",
-            messages: [
-              {
-                role: "system",
-                content: finalMessage,
-              },
-            ],
-            stream: true,
-            temperature: 1.1,
-            max_tokens: 600,
-            top_p: 1,
-            frequency_penalty: 0.3,
-            presence_penalty: 0.5,
-          });
-
-  for await (const chunk of response) {
-    console.log(chunk.choices[0].delta.content); // This correctly streams it in the terminal 
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        for await (const chunk of llmResult) {
+          console.log(chunk); // This correctly streams it in the terminal 
+        }
 
         await setIsTypingRight(false);
-        await setUserMessages(userMessages => [...userMessages,{text:"",isReply:true}]);
+        await setUserMessages(userMessages => [...userMessages,{text:llmResult,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;

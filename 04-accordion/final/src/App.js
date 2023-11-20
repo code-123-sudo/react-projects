@@ -14,6 +14,7 @@ import menu from './assets/menu.png';
 function App() {
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
+  const [chats,setChats] = useState([]);
   
   const [isStreaming,setIsStreaming] = useState('');
   const [streamData,setStreamData] = useState();
@@ -150,6 +151,7 @@ function App() {
     let key = "chat" + count.toString();
     console.log(key)
     localStorage.setItem(key,stringConverted);
+    setChats([...chats,count])
     setChatMessages([]);
     console.log("some yex dijs ")
   }
@@ -168,6 +170,13 @@ function App() {
       </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
         <div className="newChatButton" onClick={startNewChat} >New Chat +</div>
+        {chats.map((value) => {
+          return (
+            <div className="chatsListItem">
+              {value+1}
+            </div>
+          )
+        })}
       </div>
       <div className= {"chatBox " +  (isHamburgerAnimate ? 'chatBox2' : null) }>
         <div className="parentDiv">

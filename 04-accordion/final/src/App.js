@@ -5,22 +5,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import data from './data.js'
 import 'react-toastify/dist/ReactToastify.css';
 
-import { API_KEY } from "./constants.js"
+import { API_KEY, API_URL } from "./constants.js"
 
 import send from './assets/send.png'
 import menu from './assets/menu.png';
 
-const API_URL = "https://api.openai.com/v1/chat/completions";
-
-
-const chatModel = new ChatOpenAI({
-  openAIApiKey: API_KEY,
-  temperature: 0,
-  model: "text-davinci-003"
-  // max_tokens: 100,
-  // temperature: 0,
-  // stream: true,
-}, { responseType: 'stream' });
 
 function App() {
   const [message, setMessage] = useState('');
@@ -53,12 +42,13 @@ function App() {
 
   useEffect(() => {
       setMessage('');
+      setChatMessages(chatMessages)
       scrollToBottom();
-    },[chatMessages])
+  },[chatMessages])
 
   const addAiAnswerToChat = async () => {
     try {
-      await setIsTypingRight(true);
+      setIsTypingRight(true);
       scrollToBottom();
 
       // first search in cache for the user question
@@ -66,14 +56,14 @@ function App() {
 
       if (!foundInCache){
       // if not found in cache , get answer from open chat ai
-        const finalMessage = message + "Reply in a maximum of 100 words. Always reply in Hindi with English characters";
+        const finalMessage = message + " Reply in a maximum of 20 words. Always reply in Hindi with English characters";
         const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${API_KEY}`,
-        },
-        body: JSON.stringify({
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${API_KEY}`,
+            },
+          body: JSON.stringify({
           model: "gpt-3.5-turbo",
           messages: [{ role: "user",content: finalMessage }],
           temperature: 0.1,
@@ -82,98 +72,46 @@ function App() {
         });
 
 
-       async function* streamAsyncIterator(stream) {
-  // Get a lock on the stream
-  const reader = stream.getReader();
-
-  try {
-    while (true) {
+        async function* streamAsyncIterator(stream) {
+      // Get a lock on the stream
+          const reader = stream.getReader();
+          try {
+            while (true) {
       // Read from the stream
-      const {done, value} = await reader.read();
+            const {done, value} = await reader.read();
       // Exit if we're done
-      if (done) return;
+            if (done) return;
       // Else yield the chunk
-      yield value;
-    }
-  }
-  finally {
-    reader.releaseLock();
-  }
-}
-
-let textRecieved = ""
-const decoder = new TextDecoder();
-
-await setIsStreaming(true);
-for await (const chunk of streamAsyncIterator(response.body)) {
-    // …
-    const data = decoder.decode(chunk)
-    const lsData = data.split("\n\n")
-    lsData.map((data) => {
-      try {
-        const jd = JSON.parse(data.replace("data: ",""));
-        if ( jd["choices"][0]["delta"]["content"] ){
-          const txt = jd["choices"][0]["delta"]["content"]
-          textRecieved += txt;
-          console.log(textRecieved)
-          setStreamData(textRecieved)
+            yield value;
+          }
         }
-      }catch(err) {
+          finally {
+            reader.releaseLock();
+          }
+        }
 
-      }
-    })
-    console.log(data)
-  }
-      
+        let textRecieved = ""
+        const decoder = new TextDecoder();
+        await setIsStreaming(true);
+        for await (const chunk of streamAsyncIterator(response.body)) {
+          setIsTypingRight(false)
+          const data = decoder.decode(chunk)
+          const lsData = data.split("\n\n")
+          lsData.map((data) => {
+          try {
+            const jd = JSON.parse(data.replace("data: ",""));
+            if ( jd["choices"][0]["delta"]["content"] ){
+              const txt = jd["choices"][0]["delta"]["content"]
+              textRecieved += txt;
+              setStreamData(textRecieved)
+            }
+          } catch(err) {
 
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // const llmResult = await chatModel.predict({
-        //   model: "text-davinci-003",
-        //   max_tokens: 100,
-        //   temperature: 0,
-        //   stream: true,
-        //   content: finalMessage
-        // }, { responseType: 'stream' });
-
-        // let str = ""
-        // await setIsStreaming(true);
-        // console.log(llmResult)
-        // for await (const chunk of llmResult) {
-        //   console.log(chunk)
-        //   str += chunk;
-        //   await setStreamData(str)
-        //   await setTimeout(() => {
-        //     console.log("---- time interval ----")
-        //   },1000)
-        // }
-          // console.log(chunk); // This correctly streams it in the terminal 
-      
-        await setIsStreaming(false)
-        await setIsTypingRight(false);
-        await setChatMessages(chatMessages => [...chatMessages,{text:streamData,isReply:true}]);
+            }
+          })
+        }
+        setIsStreaming(false)
+        setChatMessages(chatMessages => [...chatMessages,{text:textRecieved,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;
@@ -186,7 +124,8 @@ for await (const chunk of streamAsyncIterator(response.body)) {
   }
 
   const addUserQuestionToChat = async () => { 
-    await setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+    setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+    setStreamData("")
     addAiAnswerToChat();
   }
 
@@ -258,7 +197,7 @@ for await (const chunk of streamAsyncIterator(response.body)) {
             {
               isStreaming &&
                 <div className="chatLeftContainer">
-                  <div className="user">Assistant</div>
+                  <div className="user">Assistant2</div>
                   <div className='chat-right'>
                     {streamData}
                   </div>

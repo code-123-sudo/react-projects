@@ -13,7 +13,11 @@ import menu from './assets/menu.png';
 const chatModel = new ChatOpenAI({
   openAIApiKey: API_KEY,
   temperature: 0,
-});
+  model: "text-davinci-003",
+  max_tokens: 100,
+  temperature: 0,
+  stream: true,
+}, { responseType: 'stream' });
 
 function App() {
   const [message, setMessage] = useState('');
@@ -70,10 +74,14 @@ function App() {
 
         let str = ""
         await setIsStreaming(true);
+        console.log(llmResult)
         for await (const chunk of llmResult) {
           console.log(chunk)
           str += chunk;
           await setStreamData(str)
+          await setTimeout(() => {
+            console.log("---- time interval ----")
+          },1000)
         }
           // console.log(chunk); // This correctly streams it in the terminal 
       

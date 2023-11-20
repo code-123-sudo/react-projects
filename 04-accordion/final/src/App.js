@@ -205,6 +205,16 @@ function App() {
               }
         </div>
         </div>
+        <div className="commonfaqs">
+            <div className="faqs1">
+              <div className="faq">Who is Nelson Mandela</div>
+              <div className="faq">Who is Rahul Dravid</div>
+            </div>
+            <div className="faqs2">
+              <div className="faq">Who is Barack Obama</div>
+              <div className="faq">Who is Undertaker</div>
+            </div>
+        </div>
         <div className="flexRowContainer">
           <div className="flexRow">
             <div className="inputContainer">

@@ -23,7 +23,7 @@ function App() {
   const [isHamburger,setIsHamburger] = useState(false);
   const [isHamburgerAnimate,setIsHamburgerAnimate] = useState(false);
 
-  const [count,setCount] = useState(0);
+  let [count,setCount] = useState(0);
 
   let foundInCache = false;
   let messagesEndRef = useRef(null);
@@ -144,7 +144,7 @@ function App() {
 
   const startNewChat = () => {
     setCount(count++);
-    let stringConverted = JSON.string(chatMessages);
+    let stringConverted = JSON.stringify(chatMessages);
     let key = "chat" + count.toString();
     localStorage.setItem(key,stringConverted);
     setChatMessages([]);
@@ -164,18 +164,7 @@ function App() {
         <img src={menu} className="iconImg" />
       </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
-        {[1,2,3,4,5].map((value) => {
-            let tempCount = value.toString();
-            let tempKey = "chat" + tempCount;
-            let text = JSON.parse(localStorage.getItem(tempKey))[0].slice(0,9)
-            return (
-              <div>
-                {text}
-              </div>
-            )
-          })
-        }
-        <div className="newChatButton" onClick={startNewChat}>New Chat +</div>
+        <div className="newChatButton" onClick={startNewChat} >New Chat +</div>
       </div>
       <div className= {"chatBox " +  (isHamburgerAnimate ? 'chatBox2' : null) }>
         <div className="parentDiv">

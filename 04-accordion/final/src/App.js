@@ -156,10 +156,12 @@ function App() {
     console.log("some yex dijs ")
   }
 
-  const showSavedChat = (countNo) => {
+  const fetchOldChat = (countNo) => {
     let keyR = "chat" + countNo.toString();
     let retString = localStorage.getItem(keyR);
     let retArray = JSON.parse(retString);
+    console.log("here i am")
+    console.log(retArray)
     setChatMessages(retArray);
   }
 
@@ -172,7 +174,7 @@ function App() {
         <div className="newChatButton" onClick={startNewChat} >New Chat +</div>
         {chats.map((value) => {
           return (
-            <div className="chatsListItem">
+            <div className="chatsListItem" onClick={ () => {fetchOldChat(value)}}>
               {value+1}
             </div>
           )

@@ -81,10 +81,59 @@ function App() {
           }),
         });
 
-        // const data = await response.json();
 
-        console.log(response)
+       async function* streamAsyncIterator(stream) {
+  // Get a lock on the stream
+  const reader = stream.getReader();
+
+  try {
+    while (true) {
+      // Read from the stream
+      const {done, value} = await reader.read();
+      // Exit if we're done
+      if (done) return;
+      // Else yield the chunk
+      yield value;
+    }
+  }
+  finally {
+    reader.releaseLock();
+  }
+}
+
+let text = ""
+const decoder = new TextDecoder();
+
+for await (const chunk of streamAsyncIterator(response.body)) {
+    // …
+    const data = decoder.decode(chunk)
+    console.log(data)
+  }
+      
+
+
+
+
+
+
+
+
+
+
     
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // const llmResult = await chatModel.predict({
         //   model: "text-davinci-003",

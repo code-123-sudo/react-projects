@@ -22,6 +22,9 @@ function App() {
   const [isTypingRight,setIsTypingRight] = useState(false);
   const [isHamburger,setIsHamburger] = useState(false);
   const [isHamburgerAnimate,setIsHamburgerAnimate] = useState(false);
+
+  const [count,setCount] = useState(0);
+
   let foundInCache = false;
   let messagesEndRef = useRef(null);
   
@@ -56,7 +59,7 @@ function App() {
 
       if (!foundInCache){
       // if not found in cache , get answer from open chat ai
-        const finalMessage = message + " Reply in a maximum of 20 words. Always reply in Hindi with English characters";
+        const finalMessage = "chatgpt " + message + " Reply in a maximum of 20 words. Always reply in Hindi with English characters";
         const response = await fetch(API_URL, {
           method: "POST",
           headers: {
@@ -139,13 +142,40 @@ function App() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 
+  const startNewChat = () => {
+    setCount(count++);
+    let stringConverted = JSON.string(chatMessages);
+    let key = "chat" + count.toString();
+    localStorage.setItem(key,stringConverted);
+    setChatMessages([]);
+    console.log("some yex dijs ")
+  }
+
+  const showSavedChat = (countNo) => {
+    let keyR = "chat" + countNo.toString();
+    let retString = localStorage.getItem(keyR);
+    let retArray = JSON.parse(retString);
+    setChatMessages(retArray);
+  }
+
   return (
     <div className="topDiv">
       <div className="menuButton" onClick={() => {setIsHamburger(!isHamburger);setIsHamburgerAnimate(!isHamburgerAnimate)}}>
         <img src={menu} className="iconImg" />
       </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
-        <div className="newChatButton">New Chat +</div>
+        {[1,2,3,4,5].map((value) => {
+            let tempCount = value.toString();
+            let tempKey = "chat" + tempCount;
+            let text = JSON.parse(localStorage.getItem(tempKey))[0].slice(0,9)
+            return (
+              <div>
+                {text}
+              </div>
+            )
+          })
+        }
+        <div className="newChatButton" onClick={startNewChat}>New Chat +</div>
       </div>
       <div className= {"chatBox " +  (isHamburgerAnimate ? 'chatBox2' : null) }>
         <div className="parentDiv">

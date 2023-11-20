@@ -101,12 +101,27 @@ function App() {
   }
 }
 
-let text = ""
+let textRecieved = ""
 const decoder = new TextDecoder();
 
+await setIsStreaming(true);
 for await (const chunk of streamAsyncIterator(response.body)) {
     // …
     const data = decoder.decode(chunk)
+    const lsData = data.split("\n\n")
+    lsData.map((data) => {
+      try {
+        const jd = JSON.parse(data.replace("data: ",""));
+        if ( jd["choices"][0]["delta"]["content"] ){
+          const txt = jd["choices"][0]["delta"]["content"]
+          textRecieved += txt;
+          console.log(textRecieved)
+          setStreamData(textRecieved)
+        }
+      }catch(err) {
+
+      }
+    })
     console.log(data)
   }
       
@@ -158,7 +173,7 @@ for await (const chunk of streamAsyncIterator(response.body)) {
       
         await setIsStreaming(false)
         await setIsTypingRight(false);
-        await setChatMessages(chatMessages => [...chatMessages,{text:"str",isReply:true}]);
+        await setChatMessages(chatMessages => [...chatMessages,{text:streamData,isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;

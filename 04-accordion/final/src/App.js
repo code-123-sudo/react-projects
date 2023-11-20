@@ -10,13 +10,16 @@ import { API_KEY } from "./constants.js"
 import send from './assets/send.png'
 import menu from './assets/menu.png';
 
+const API_URL = "https://api.openai.com/v1/chat/completions";
+
+
 const chatModel = new ChatOpenAI({
   openAIApiKey: API_KEY,
   temperature: 0,
-  model: "text-davinci-003",
-  max_tokens: 100,
-  temperature: 0,
-  stream: true,
+  model: "text-davinci-003"
+  // max_tokens: 100,
+  // temperature: 0,
+  // stream: true,
 }, { responseType: 'stream' });
 
 function App() {
@@ -64,30 +67,49 @@ function App() {
       if (!foundInCache){
       // if not found in cache , get answer from open chat ai
         const finalMessage = message + "Reply in a maximum of 100 words. Always reply in Hindi with English characters";
-        const llmResult = await chatModel.predict({
-          model: "text-davinci-003",
-          max_tokens: 100,
-          temperature: 0,
-          stream: true,
-          content: finalMessage
-        }, { responseType: 'stream' });
+        const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user",content: finalMessage }],
+          temperature: 0.1,
+          stream : true
+          }),
+        });
 
-        let str = ""
-        await setIsStreaming(true);
-        console.log(llmResult)
-        for await (const chunk of llmResult) {
-          console.log(chunk)
-          str += chunk;
-          await setStreamData(str)
-          await setTimeout(() => {
-            console.log("---- time interval ----")
-          },1000)
-        }
+        // const data = await response.json();
+
+        console.log(response)
+    
+
+        // const llmResult = await chatModel.predict({
+        //   model: "text-davinci-003",
+        //   max_tokens: 100,
+        //   temperature: 0,
+        //   stream: true,
+        //   content: finalMessage
+        // }, { responseType: 'stream' });
+
+        // let str = ""
+        // await setIsStreaming(true);
+        // console.log(llmResult)
+        // for await (const chunk of llmResult) {
+        //   console.log(chunk)
+        //   str += chunk;
+        //   await setStreamData(str)
+        //   await setTimeout(() => {
+        //     console.log("---- time interval ----")
+        //   },1000)
+        // }
           // console.log(chunk); // This correctly streams it in the terminal 
       
         await setIsStreaming(false)
         await setIsTypingRight(false);
-        await setChatMessages(chatMessages => [...chatMessages,{text:str,isReply:true}]);
+        await setChatMessages(chatMessages => [...chatMessages,{text:"str",isReply:true}]);
         foundInCache = false;
       }
       foundInCache=false;

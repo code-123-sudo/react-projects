@@ -173,9 +173,15 @@ function App() {
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
         <div className="newChatButton" onClick={startNewChat} >New Chat +</div>
         {chats.map((value) => {
+          let keyRr = "chat" + value.toString();
+          let returnString = localStorage.getItem(keyRr);
+          let returnArray = JSON.parse(returnString);
+          let quesText = returnArray[0].text
+          console.log("questext " + quesText[0])
+          quesText = quesText.slice(0,10)
           return (
             <div className="chatsListItem" onClick={ () => {fetchOldChat(value)}}>
-              {value+1}
+              {quesText}....
             </div>
           )
         })}

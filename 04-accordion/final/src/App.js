@@ -13,8 +13,10 @@ import menu from './assets/menu.png';
 
 function App() {
   const [message, setMessage] = useState('');
+
   const [chatMessages, setChatMessages] = useState([]);
   const [chats,setChats] = useState([]);
+  const [currentChat,setCurrentChat] = useState("chat0")
   
   const [isStreaming,setIsStreaming] = useState('');
   const [streamData,setStreamData] = useState();
@@ -144,24 +146,41 @@ function App() {
   }
 
   const startNewChat = () => {
-    let stringConverted = JSON.stringify(chatMessages);
-    console.log(stringConverted)
+
+
+    // const keyss = Object.keys(localStorage);
+    // console.log("-----"+keyss+"------")
+    // console.log(currentChat)
+    // keyss.forEach((keys) => {
+    //   if ( keys == currentChat) {
+    //       let stringConverted = JSON.stringify(chatMessages);
+    //       localStorage.setItem(keys,stringConverted);
+    //       setChatMessages([]);
+    //       return;
+    //   }
+    // });
+
+    let stringsConverted = JSON.stringify(chatMessages);
+    console.log(stringsConverted)
     let key = "chat" + count.toString();
     console.log(key)
-    localStorage.setItem(key,stringConverted);
+    localStorage.setItem(key,stringsConverted);
     setChats([...chats,count])
     setChatMessages([]);
     let tempCount = count+1;
     setCount(tempCount);
-    console.log("some yex dijs ")
   }
 
   const fetchOldChat = (countNo) => {
+
+    let stringsConverted2 = JSON.stringify(chatMessages);
+    localStorage.setItem(currentChat,stringsConverted2);
+
+
     let keyR = "chat" + countNo.toString();
+    setCurrentChat(keyR)
     let retString = localStorage.getItem(keyR);
     let retArray = JSON.parse(retString);
-    console.log("here i am")
-    console.log(retArray)
     setChatMessages(retArray);
   }
 
@@ -177,7 +196,7 @@ function App() {
           let returnString = localStorage.getItem(keyRr);
           let returnArray = JSON.parse(returnString);
           let quesText = returnArray[0].text
-          console.log("questext " + quesText[0])
+          // console.log("questext " + quesText[0])
           quesText = quesText.slice(0,10)
           return (
             <div className="chatsListItem" onClick={ () => {fetchOldChat(value)}}>

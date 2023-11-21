@@ -144,8 +144,6 @@ function App() {
   }
 
   const startNewChat = () => {
-    let tempCount = count+1;
-    setCount(tempCount);
     let stringConverted = JSON.stringify(chatMessages);
     console.log(stringConverted)
     let key = "chat" + count.toString();
@@ -153,6 +151,8 @@ function App() {
     localStorage.setItem(key,stringConverted);
     setChats([...chats,count])
     setChatMessages([]);
+    let tempCount = count+1;
+    setCount(tempCount);
     console.log("some yex dijs ")
   }
 

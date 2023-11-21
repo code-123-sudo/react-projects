@@ -146,29 +146,38 @@ function App() {
   }
 
   const startNewChat = () => {
-
-
-    // const keyss = Object.keys(localStorage);
-    // console.log("-----"+keyss+"------")
-    // console.log(currentChat)
-    // keyss.forEach((keys) => {
-    //   if ( keys == currentChat) {
-    //       let stringConverted = JSON.stringify(chatMessages);
-    //       localStorage.setItem(keys,stringConverted);
-    //       setChatMessages([]);
-    //       return;
-    //   }
-    // });
-
-    let stringsConverted = JSON.stringify(chatMessages);
-    console.log(stringsConverted)
-    let key = "chat" + count.toString();
-    console.log(key)
-    localStorage.setItem(key,stringsConverted);
-    setChats([...chats,count])
-    setChatMessages([]);
-    let tempCount = count+1;
-    setCount(tempCount);
+    
+    let isOld = false;
+    const keyss = Object.keys(localStorage);
+    console.log("-----"+keyss+"------")
+    console.log(currentChat)
+    keyss.forEach((keys) => {
+      if ( keys == currentChat) {
+          isOld = true;
+          let stringConverted = JSON.stringify(chatMessages);
+          localStorage.setItem(keys,stringConverted);
+          setChatMessages([]);
+          // let tempCount = count+1;
+          // setCount(tempCount)
+          // tempCount = "chat"+tempCount.toString();
+          // setCurrentChat(tempCount)
+          return;
+      }
+    });
+    if (!isOld){
+      let stringsConverted = JSON.stringify(chatMessages);
+      console.log(stringsConverted)
+      let key = "chat" + count.toString();
+      console.log(key)
+      localStorage.setItem(key,stringsConverted);
+      setChats([...chats,count])
+      setChatMessages([]);
+      let tempCount = count+1;
+      setCount(tempCount);
+      tempCount = tempCount.toString();
+      let tempChat = "chat"+tempCount;
+      setCurrentChat(tempChat)
+    }
   }
 
   const fetchOldChat = (countNo) => {
@@ -195,9 +204,9 @@ function App() {
           let keyRr = "chat" + value.toString();
           let returnString = localStorage.getItem(keyRr);
           let returnArray = JSON.parse(returnString);
-          let quesText = returnArray[0].text
+          let quesText = returnArray[0]?.text
           // console.log("questext " + quesText[0])
-          quesText = quesText.slice(0,10)
+          quesText = quesText?.slice(0,10)
           return (
             <div className="chatsListItem" onClick={ () => {fetchOldChat(value)}}>
               {quesText}....

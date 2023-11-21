@@ -17,6 +17,7 @@ function App() {
   const [chatMessages, setChatMessages] = useState([]);
   const [chats,setChats] = useState([]);
   const [currentChat,setCurrentChat] = useState("chat0")
+  const [count,setCount] = useState(0);
   
   const [isStreaming,setIsStreaming] = useState('');
   const [streamData,setStreamData] = useState();
@@ -25,8 +26,6 @@ function App() {
   const [isTypingRight,setIsTypingRight] = useState(false);
   const [isHamburger,setIsHamburger] = useState(false);
   const [isHamburgerAnimate,setIsHamburgerAnimate] = useState(false);
-
-  let [count,setCount] = useState(0);
 
   let foundInCache = false;
   let messagesEndRef = useRef(null);
@@ -216,7 +215,7 @@ function App() {
       </div>
       <div className= {"chatBox " +  (isHamburgerAnimate ? 'chatBox2' : null) }>
         <div className="parentDiv">
-        <div>
+        <div className="box">
           <ToastContainer />
           <div className='chat-container'>
             {chatMessages.map((value) => {
@@ -272,6 +271,7 @@ function App() {
               }
         </div>
         </div>
+        { chatMessages.length == 0 ?
         <div className="commonfaqs">
             <div className="faqs1">
               <div className="faq">Who is Nelson Mandela</div>
@@ -281,7 +281,7 @@ function App() {
               <div className="faq">Who is Barack Obama</div>
               <div className="faq">Who is Undertaker</div>
             </div>
-        </div>
+        </div> : null }
         <div className="flexRowContainer">
           <div className="flexRow">
             <div className="inputContainer">

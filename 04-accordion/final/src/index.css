@@ -198,7 +198,7 @@ main {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  margin-top: 200px;
+  margin-top: 185px;
 }
 .faqs1 {
   display: flex;
@@ -315,4 +315,8 @@ button :: hover {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.box{
+  margin-top: 202px;
+  max-height: 69vh;
 }

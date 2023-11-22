@@ -201,8 +201,12 @@ function App() {
 
 
 
-  const addUserQuestionToChat = async () => { 
-    setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+  const addUserQuestionToChat = async (fromCache) => { 
+    if ( fromCache ){
+      setChatMessages(chatMessages => [...chatMessages,{text:fromCache,isReply:false}]);
+    }else {
+      setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+    }
     scrollToBottom();
     let tempChats = chats;
     const index = tempChats.indexOf(pageNo);
@@ -227,7 +231,6 @@ function App() {
   };
 
   const scrollToBottom = () => {
-    console.log("this function called")
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -388,12 +391,12 @@ function App() {
         { chatMessages.length == 0 ?
           <div className="commonfaqs">
             <div className="faqs1">
-              <div className="faq">Who is Nelson Mandela</div>
-              <div className="faq">Who is Rahul Dravid</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Nelson Mandela")}}>Who is Nelson Mandela</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Rahul Dravid")}}>Who is Rahul Dravid</div>
             </div>
             <div className="faqs2">
-              <div className="faq">Who is Barack Obama</div>
-              <div className="faq">Who is Undertaker</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Barack Obama")}}>Who is Barack Obama</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Undertaker")}}>Who is Undertaker</div>
             </div>
           </div> : null }
         <div className="flexRowContainer">

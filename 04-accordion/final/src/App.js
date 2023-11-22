@@ -14,27 +14,42 @@ import menu from './assets/menu.png';
 function App() {
   const [message, setMessage] = useState('');
 
-  const [chatMessages, setChatMessages] = useState([]);
-  const [chats,setChats] = useState([]);
-  const [currentChat,setCurrentChat] = useState("chat0")
-  const [count,setCount] = useState(0);
+  const [chatMessages, setChatMessages] = useState(() => {
+    return JSON.parse(localStorage.getItem('chatMessages')) || []
+  });;
+  const [chats,setChats] = useState(() => {
+    return JSON.parse(localStorage.getItem('chats')) || []
+  });;
+  const [currentChat,setCurrentChat] = useState(() => {
+    return JSON.parse(localStorage.getItem('currentChat')) || 'chat0'
+  });
+  const [count,setCount] = useState(() => {
+    return JSON.parse(localStorage.getItem('count')) || 0
+  });
   
   const [isStreaming,setIsStreaming] = useState('');
   const [streamData,setStreamData] = useState();
 
   const [isTypingLeft,setIsTypingLeft] = useState(false);
   const [isTypingRight,setIsTypingRight] = useState(false);
-  const [isHamburger,setIsHamburger] = useState(false);
-  const [isHamburgerAnimate,setIsHamburgerAnimate] = useState(false);
+
+   const [isHamburger,setIsHamburger] = useState(() => {
+    return JSON.parse(localStorage.getItem('isHamburger')) || false
+  });
+  const [isHamburgerAnimate,setIsHamburgerAnimate] = useState(() => {
+    return JSON.parse(localStorage.getItem('isHamburgerAnimate')) || false
+  });
 
   let foundInCache = false;
   let messagesEndRef = useRef(null);
+
+  useEffect(() => {
+
+  },[chatMessages,chats,currentChat,count])
   
   const saveInLocalStorage = (key,value) => {
     localStorage.setItem(key,value);
   }
-
-
 
   const handleChange = (event) => {
     setMessage(event.target.value)
@@ -52,10 +67,37 @@ function App() {
   }
 
   useEffect(() => {
-      setMessage('');
-      setChatMessages(chatMessages)
-      scrollToBottom();
-  },[chatMessages])
+      saveInLocalStorage('count',JSON.stringify(count))
+      saveInLocalStorage('currentChat',JSON.stringify(currentChat))
+      saveInLocalStorage('chatMessages',JSON.stringify(chatMessages))
+      saveInLocalStorage('chats',JSON.stringify(chats))
+      saveInLocalStorage('isHamburger',JSON.stringify(isHamburger))
+      saveInLocalStorage('isHamburgerAnimate',JSON.stringify(isHamburgerAnimate))
+  })
+
+  useEffect(() => {
+      let countLS = localStorage.getItem('count')
+      let currentChatLS = localStorage.getItem('currentChat')
+      let chatMessagesLS = localStorage.getItem('chatMessages')
+      let chatsLS = localStorage.getItem('chats')
+      let isHamburgerLS = localStorage.getItem('isHamburger')
+      let isHamburgerAnimateLS = localStorage.getItem('isHamburgerAnimate')
+
+      countLS = JSON.parse(countLS)
+      currentChatLS = JSON.parse(currentChatLS)
+      chatMessagesLS =  JSON.parse(chatMessagesLS)
+      chatsLS = JSON.parse(chatsLS)
+      isHamburgerLS = JSON.parse(isHamburgerLS)
+      isHamburgerAnimateLS = JSON.parse(isHamburgerAnimateLS)
+
+      setCount(countLS)
+      setCurrentChat(currentChatLS)
+      setChatMessages(chatMessagesLS)
+      setChats(chatsLS)
+      setIsHamburger(isHamburgerLS)
+      setIsHamburgerAnimate(isHamburgerAnimateLS)
+
+  },[])
 
   const addAiAnswerToChat = async () => {
     try {
@@ -134,6 +176,21 @@ function App() {
     }
   }
 
+
+  useEffect(() => {
+    if ( chatMessages.length == 1 ) {
+      let stringsConverted = JSON.stringify(chatMessages);
+      console.log(stringsConverted)
+      let key = "chat" + count.toString();
+      console.log(key)
+      localStorage.setItem(key,stringsConverted);
+      setChats([count,...chats])
+    }
+  },[chatMessages])
+ 
+
+
+
   const addUserQuestionToChat = async () => { 
     setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
     setStreamData("")
@@ -143,6 +200,7 @@ function App() {
   const enterKeySend = e => {
     if (e.keyCode === 13) {
       addUserQuestionToChat();
+
     }
   };
 
@@ -166,6 +224,7 @@ function App() {
           setCount(tempCount)
           let tempCounts = "chat"+tempCount.toString();
           setCurrentChat(tempCounts)
+
           return;
       }
     });
@@ -221,7 +280,6 @@ function App() {
       tempChats = [countNo,...tempChats]
       setChats(tempChats)
     }
-
   }
 
   return (
@@ -231,15 +289,21 @@ function App() {
       </div>
       <div className={ isHamburger ? 'hamburger' : 'hamburger hamburger2'} >
         <div className="newChatButton" onClick={startNewChat} >New Chat +</div>
-        {chats.map((value) => {
+        {chats?.map((value) => {
           let keyRr = "chat" + value.toString();
           let returnString = localStorage.getItem(keyRr);
           let returnArray = JSON.parse(returnString);
-          let quesText = returnArray[0]?.text
+          let quesText = '';
+          if (!returnArray ){
+            return null;
+          }
+          if ( returnArray ){
+            quesText = returnArray[0]?.text
+          }
           quesText = quesText?.slice(0,10)
           return (
             <div className="chatsListItem" onClick={ () => {fetchOldChat(value)}}>
-              {quesText.length >0 ? quesText + '....' : ''}
+              {quesText?.length >0 ? quesText + '....' : ''}
             </div>
           )
         })}

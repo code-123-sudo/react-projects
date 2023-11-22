@@ -169,7 +169,7 @@ function App() {
       let key = "chat" + count.toString();
       console.log(key)
       localStorage.setItem(key,stringsConverted);
-      setChats([...chats,count])
+      setChats([count,...chats])
       setChatMessages([]);
       let tempCount = count+1;
       setCount(tempCount);
@@ -193,7 +193,7 @@ function App() {
       }
 
 
-      if ( !oldChatFlag ) setChats([...chats,count])
+      if ( !oldChatFlag ) setChats([count,...chats])
         console.log(chats)
     }
 
@@ -206,6 +206,17 @@ function App() {
     let retString = localStorage.getItem(keyR);
     let retArray = JSON.parse(retString);
     setChatMessages(retArray);
+    
+
+    /* sorting the chat order as newest first */
+    let tempChats = chats;
+    const index = tempChats.indexOf(countNo);
+    if (index > -1) { 
+      tempChats.splice(index, 1);
+      tempChats = [countNo,...tempChats]
+      setChats(tempChats)
+    }
+
   }
 
   return (

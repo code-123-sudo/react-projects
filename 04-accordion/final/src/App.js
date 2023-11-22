@@ -2,7 +2,7 @@ import React, { useState , useEffect , useRef } from 'react';
 import { OpenAI } from "langchain/llms/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ToastContainer, toast } from 'react-toastify';
-import data from './data.js'
+import { data, defaultQuestions } from './data.js'
 import 'react-toastify/dist/ReactToastify.css';
 
 import { API_KEY, API_URL } from "./constants.js"
@@ -391,12 +391,12 @@ function App() {
         { chatMessages.length == 0 ?
           <div className="commonfaqs">
             <div className="faqs1">
-              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Nelson Mandela")}}>Who is Nelson Mandela</div>
-              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Rahul Dravid")}}>Who is Rahul Dravid</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat(defaultQuestions[0].question)}}>Who is Nelson Mandela</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat(defaultQuestions[1].question)}}>Who is Rahul Dravid</div>
             </div>
             <div className="faqs2">
-              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Barack Obama")}}>Who is Barack Obama</div>
-              <div className="faq" onClick={() => {addUserQuestionToChat("Who is Undertaker")}}>Who is Undertaker</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat(defaultQuestions[2].question)}}>Who is Barack Obama</div>
+              <div className="faq" onClick={() => {addUserQuestionToChat(defaultQuestions[3].question)}}>Who is Undertaker</div>
             </div>
           </div> : null }
         <div className="flexRowContainer">

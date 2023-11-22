@@ -8,4 +8,11 @@ let data = [
 
 ]
 
-export default data;
+let defaultQuestions = [
+	{ question : "Who is Nelson Mandela"},
+	{ question : "Who is Rahul Dravid"},
+	{ question : "Who is Barack Obama"},
+	{ question : "Who is Undertaker"}
+]
+
+export { data , defaultQuestions };

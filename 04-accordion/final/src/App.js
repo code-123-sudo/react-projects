@@ -145,6 +145,8 @@ function App() {
   }
 
   const startNewChat = () => {
+
+    if ( chatMessages.length == 0 ) return;
     
     let isOld = false;
     const keyss = Object.keys(localStorage);
@@ -156,10 +158,10 @@ function App() {
           let stringConverted = JSON.stringify(chatMessages);
           localStorage.setItem(keys,stringConverted);
           setChatMessages([]);
-          // let tempCount = count+1;
-          // setCount(tempCount)
-          // tempCount = "chat"+tempCount.toString();
-          // setCurrentChat(tempCount)
+          let tempCount = count+1;
+          setCount(tempCount)
+          let tempCounts = "chat"+tempCount.toString();
+          setCurrentChat(tempCounts)
           return;
       }
     });
@@ -181,11 +183,14 @@ function App() {
 
   const fetchOldChat = (countNo) => {
 
-    let stringsConverted2 = JSON.stringify(chatMessages);
-    localStorage.setItem(currentChat,stringsConverted2);
+    if(chatMessages.length != 0) {
+      let stringsConverted2 = JSON.stringify(chatMessages);
+      localStorage.setItem(currentChat,stringsConverted2);
+    }
 
 
     let keyR = "chat" + countNo.toString();
+    if ( keyR == currentChat ) return;
     setCurrentChat(keyR)
     let retString = localStorage.getItem(keyR);
     let retArray = JSON.parse(retString);

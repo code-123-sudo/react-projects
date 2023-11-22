@@ -30,6 +30,12 @@ function App() {
   let foundInCache = false;
   let messagesEndRef = useRef(null);
   
+  const saveInLocalStorage = (key,value) => {
+    localStorage.setItem(key,value);
+  }
+
+
+
   const handleChange = (event) => {
     setMessage(event.target.value)
   }
@@ -184,7 +190,7 @@ function App() {
     if(chatMessages.length != 0) {
       let stringsConverted2 = JSON.stringify(chatMessages);
       localStorage.setItem(currentChat,stringsConverted2);
-      /* chekcing wether its a new chat or old chat */
+      /* checking wether its a new chat or old chat */
 
       let oldChatFlag = false;
 
@@ -194,7 +200,6 @@ function App() {
 
 
       if ( !oldChatFlag ) setChats([count,...chats])
-        console.log(chats)
     }
 
 

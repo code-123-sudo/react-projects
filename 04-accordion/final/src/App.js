@@ -26,6 +26,11 @@ function App() {
   const [count,setCount] = useState(() => {
     return JSON.parse(localStorage.getItem('count')) || 0
   });
+
+  const [pageNo,setPageNo] = useState(() => {
+    return JSON.parse(localStorage.getItem('pageNo')) || 0
+  });
+
   
   const [isStreaming,setIsStreaming] = useState('');
   const [streamData,setStreamData] = useState();
@@ -42,6 +47,7 @@ function App() {
 
   let foundInCache = false;
   let messagesEndRef = useRef(null);
+  let refr = useRef(null);
 
   useEffect(() => {
 
@@ -102,7 +108,7 @@ function App() {
   const addAiAnswerToChat = async () => {
     try {
       setIsTypingRight(true);
-      scrollToBottom();
+      
 
       // first search in cache for the user question
       searchInCache();
@@ -167,6 +173,7 @@ function App() {
         setChatMessages(chatMessages => [...chatMessages,{text:textRecieved,isReply:true}]);
         foundInCache = false;
       }
+
       foundInCache=false;
     } 
     catch(error) {
@@ -193,14 +200,22 @@ function App() {
 
   const addUserQuestionToChat = async () => { 
     setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+    let tempChats = chats;
+    const index = tempChats.indexOf(pageNo);
+    if (index > -1 ) { 
+      tempChats.splice(index, 1);
+      tempChats = [pageNo,...tempChats]
+      setChats(tempChats)
+    }
     setStreamData("")
+    setMessage(null)
     addAiAnswerToChat();
   }
 
   const enterKeySend = e => {
     if (e.keyCode === 13) {
+      refr.current.value = "";
       addUserQuestionToChat();
-
     }
   };
 
@@ -273,13 +288,7 @@ function App() {
     
 
     /* sorting the chat order as newest first */
-    let tempChats = chats;
-    const index = tempChats.indexOf(countNo);
-    if (index > -1) { 
-      tempChats.splice(index, 1);
-      tempChats = [countNo,...tempChats]
-      setChats(tempChats)
-    }
+    setPageNo(countNo)
   }
 
   return (
@@ -310,31 +319,30 @@ function App() {
       </div>
       <div className= {"chatBox " +  (isHamburgerAnimate ? 'chatBox2' : null) }>
         <div className="parentDiv">
-        <div className="box">
-          <ToastContainer />
-          <div className='chat-container'>
-            {chatMessages.map((value) => {
-              if (!value.isReply) {
-                return (
-                  <div className="chatLeftContainer">
-                    <div className="user">You</div>
-                    <div className='chat-left'>
-                      {value.text}
+          <div className="box">
+            <ToastContainer />
+            <div className='chat-container'>
+              {chatMessages.map((value) => {
+                if (!value.isReply) {
+                  return (
+                    <div className="chatLeftContainer">
+                      <div className="user">You</div>
+                      <div className='chat-left'>
+                        {value.text}
+                      </div>
                     </div>
-                  </div>
                   )
-              }else {
-                return (
-                  <div className="chatLeftContainer">
-                    <div className="user">Assistant</div>
-                    <div className='chat-right'>
-                      {value.text}
+                } else {
+                  return (
+                    <div className="chatLeftContainer">
+                      <div className="user">Assistant</div>
+                      <div className='chat-right'>
+                        {value.text}
+                      </div>
                     </div>
-                  </div>
-                )
-              }
-          })}
-          <div className='scroll-point' ref={messagesEndRef} />
+                  )
+                }
+              })}
             {
               isTypingLeft &&
                 <div className="chatLeftContainer">
@@ -353,21 +361,24 @@ function App() {
                   </div>
                 </div>
               }
-          </div>
-           
-            {
+              {
               isStreaming &&
                 <div className="chatLeftContainer">
-                  <div className="user">Assistant2</div>
+                  <div className="user">Assistant</div>
                   <div className='chat-right'>
                     {streamData}
                   </div>
                 </div>
               }
+              <div className="scroll-point" ref={messagesEndRef}>
+              </div> 
+          </div>
+           
+            
         </div>
-        </div>
+      </div>
         { chatMessages.length == 0 ?
-        <div className="commonfaqs">
+          <div className="commonfaqs">
             <div className="faqs1">
               <div className="faq">Who is Nelson Mandela</div>
               <div className="faq">Who is Rahul Dravid</div>
@@ -376,11 +387,11 @@ function App() {
               <div className="faq">Who is Barack Obama</div>
               <div className="faq">Who is Undertaker</div>
             </div>
-        </div> : null }
+          </div> : null }
         <div className="flexRowContainer">
           <div className="flexRow">
             <div className="inputContainer">
-              <input type='text' placeholder='Ask me anything about Jainism' onKeyDown={enterKeySend} onChange={handleChange} value={message}/>
+              <input type='text' ref={refr} placeholder='Ask me anything about Jainism' onKeyDown={enterKeySend} onChange={handleChange} value={message}/>
             </div>
             <div className="icon" onClick={addUserQuestionToChat}> <img src={send} /> </div>
           </div>

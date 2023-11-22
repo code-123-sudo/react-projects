@@ -150,8 +150,6 @@ function App() {
     
     let isOld = false;
     const keyss = Object.keys(localStorage);
-    console.log("-----"+keyss+"------")
-    console.log(currentChat)
     keyss.forEach((keys) => {
       if ( keys == currentChat) {
           isOld = true;
@@ -186,12 +184,25 @@ function App() {
     if(chatMessages.length != 0) {
       let stringsConverted2 = JSON.stringify(chatMessages);
       localStorage.setItem(currentChat,stringsConverted2);
+      /* chekcing wether its a new chat or old chat */
+
+      let oldChatFlag = false;
+
+      for ( let i = 0; i < chats.length; i++ ) {
+        if ( chats[i] == count ) oldChatFlag = true;
+      }
+
+
+      if ( !oldChatFlag ) setChats([...chats,count])
+        console.log(chats)
     }
 
 
     let keyR = "chat" + countNo.toString();
-    if ( keyR == currentChat ) return;
+    if ( keyR == currentChat ) return;/*user clicked on same chat button twice */
     setCurrentChat(keyR)
+
+    /*update the chat messages of button being clicked */
     let retString = localStorage.getItem(keyR);
     let retArray = JSON.parse(retString);
     setChatMessages(retArray);
@@ -209,11 +220,10 @@ function App() {
           let returnString = localStorage.getItem(keyRr);
           let returnArray = JSON.parse(returnString);
           let quesText = returnArray[0]?.text
-          // console.log("questext " + quesText[0])
           quesText = quesText?.slice(0,10)
           return (
             <div className="chatsListItem" onClick={ () => {fetchOldChat(value)}}>
-              {quesText}....
+              {quesText.length >0 ? quesText + '....' : ''}
             </div>
           )
         })}

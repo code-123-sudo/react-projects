@@ -108,7 +108,7 @@ function App() {
   const addAiAnswerToChat = async () => {
     try {
       setIsTypingRight(true);
-      
+      scrollToBottom();
 
       // first search in cache for the user question
       searchInCache();
@@ -153,6 +153,7 @@ function App() {
         const decoder = new TextDecoder();
         await setIsStreaming(true);
         for await (const chunk of streamAsyncIterator(response.body)) {
+          scrollToBottom();
           setIsTypingRight(false)
           const data = decoder.decode(chunk)
           const lsData = data.split("\n\n")
@@ -175,7 +176,9 @@ function App() {
       }
 
       foundInCache=false;
+      scrollToBottom();
     } 
+
     catch(error) {
       await setIsTypingRight(false);
       console.log(error)
@@ -200,6 +203,7 @@ function App() {
 
   const addUserQuestionToChat = async () => { 
     setChatMessages(chatMessages => [...chatMessages,{text:message,isReply:false}]);
+    scrollToBottom();
     let tempChats = chats;
     const index = tempChats.indexOf(pageNo);
     if (index > -1 ) { 
@@ -209,17 +213,21 @@ function App() {
     }
     setStreamData("")
     setMessage(null)
+    scrollToBottom();
     addAiAnswerToChat();
+    scrollToBottom();
   }
 
   const enterKeySend = e => {
     if (e.keyCode === 13) {
       refr.current.value = "";
+      scrollToBottom();
       addUserQuestionToChat();
     }
   };
 
   const scrollToBottom = () => {
+    console.log("this function called")
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }
 

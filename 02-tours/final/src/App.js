@@ -8,9 +8,9 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [posts, setPosts] = useState([])
   const [isError, setIsError] = useState(false)
-
-  const[pageStart,setPageStart] = useState(0)
-  const[pageEnd,setPageEnd] = useState(5)
+  const [pageStart,setPageStart] = useState(0)
+  const [pageEnd,setPageEnd] = useState(5)
+  const [searchTerm,setSearchTerm] = useState("")
 
   // async function to fetch data from api using fetch
   const fetchPosts = async () => {
@@ -40,8 +40,19 @@ function App() {
     if (pageStart >= 5 ) {
       setPageStart(pageStart - 5)
       setPageEnd(pageEnd - 5 )
-    }
-      
+    }    
+  }
+
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value)
+    let filteredPosts = posts.slice(pageStart,pageEnd).filter((post) => {
+      if ( post.title.includes(searchTerm) ) {
+        return true;
+      }else {
+        return false;
+      }
+    })
+    console.log(filteredPosts)
   }
 
   // show the loader while api is fetching the data 
@@ -66,6 +77,7 @@ function App() {
     <main>
       <div className="container">
         <div className="postsDiv">
+        <input type="text" onChange={(event) => {handleChange(event)}} />
         {
           posts.slice(pageStart,pageEnd).map((post,index) => {
             return (

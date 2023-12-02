@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import Loading from './Loading'
-import Tours from './Tours'
-// ATTENTION!!!!!!!!!!
-// I SWITCHED TO PERMANENT DOMAIN
-const url = 'https://course-api.com/react-tours-project'
+
+//url to fetch api data
+const url = 'https://jsonplaceholder.typicode.com/posts'
 
 function App() {
   const [loading, setLoading] = useState(true)
-  const [tours, setTours] = useState([])
+  const [posts, setPosts] = useState([])
+  const [isError, setIsError] = useState(false)
 
-  const removeTour = (id) => {
-    const newTours = tours.filter((tour) => tour.id !== id)
-    setTours(newTours)
-  }
-
-  const fetchTours = async () => {
+  // async function to fetch data from api using fetch
+  const fetchPosts = async () => {
     setLoading(true)
     try {
       const response = await fetch(url)
-      const tours = await response.json()
+      const posts = await response.json()
       setLoading(false)
-      setTours(tours)
+      setPosts(posts)
     } catch (error) {
+      setIsError(true)
       setLoading(false)
-      console.log(error)
     }
   }
+
+  // fetch the posts on innitial load of component 
   useEffect(() => {
-    fetchTours()
+    fetchPosts()
   }, [])
+
+  // show the loader while api is fetching the data 
   if (loading) {
     return (
       <main>
@@ -36,21 +36,34 @@ function App() {
       </main>
     )
   }
-  if (tours.length === 0) {
+
+  // if error show the error message
+   if (isError) {
     return (
       <main>
-        <div className='title'>
-          <h2>no tours left</h2>
-          <button className='btn' onClick={() => fetchTours()}>
-            refresh
-          </button>
-        </div>
+        Something went wrong
       </main>
     )
   }
+
   return (
     <main>
-      <Tours tours={tours} removeTour={removeTour} />
+      {
+        posts.map((post,index) => {
+          return (
+            <div>
+              <p>{index+1}</p>
+              <div>
+                Title:    {post.title}
+              </div>
+              <div>
+                Post:     {post.body}
+              </div>
+            </div>
+
+          )
+        })
+      }
     </main>
   )
 }

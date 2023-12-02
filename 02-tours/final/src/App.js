@@ -39,8 +39,9 @@ function App() {
   const previous = () => {
     if (pageStart >= 5 ) {
       setPageStart(pageStart - 5)
-    }
       setPageEnd(pageEnd - 5 )
+    }
+      
   }
 
   // show the loader while api is fetching the data 
@@ -63,24 +64,29 @@ function App() {
 
   return (
     <main>
-      {
-        posts.slice(pageStart,pageEnd).map((post,index) => {
-          return (
-            <div>
-              <p>{index+1}</p>
+      <div className="container">
+        <div className="postsDiv">
+        {
+          posts.slice(pageStart,pageEnd).map((post,index) => {
+            return (
               <div>
-                Title:    {post.title}
+                <p>{pageStart + index+1}</p>
+                <div>
+                  Title:    {post.title}
+                </div>
+                <div>
+                  Post:     {post.body}
+                </div>
               </div>
-              <div>
-                Post:     {post.body}
-              </div>
-            </div>
-
-          )
-        })
-      }
-      <button onClick={() => previous()}>Previous</button>
-      <button onClick={() => next()}>Next</button>
+            )
+          })
+        }
+        </div>
+        <div>
+          <button onClick={() => previous()}>Previous</button>
+          <button onClick={() => next()}>Next</button>
+        </div>
+      </div>
     </main>
   )
 }

@@ -9,6 +9,9 @@ function App() {
   const [posts, setPosts] = useState([])
   const [isError, setIsError] = useState(false)
 
+  const[pageStart,setPageStart] = useState(0)
+  const[pageEnd,setPageEnd] = useState(5)
+
   // async function to fetch data from api using fetch
   const fetchPosts = async () => {
     setLoading(true)
@@ -27,6 +30,18 @@ function App() {
   useEffect(() => {
     fetchPosts()
   }, [])
+
+  const next = () => {
+    setPageStart(pageStart + 5)
+    setPageEnd(pageEnd + 5 )
+  }
+
+  const previous = () => {
+    if (pageStart >= 5 ) {
+      setPageStart(pageStart - 5)
+    }
+      setPageEnd(pageEnd - 5 )
+  }
 
   // show the loader while api is fetching the data 
   if (loading) {
@@ -49,7 +64,7 @@ function App() {
   return (
     <main>
       {
-        posts.map((post,index) => {
+        posts.slice(pageStart,pageEnd).map((post,index) => {
           return (
             <div>
               <p>{index+1}</p>
@@ -64,6 +79,8 @@ function App() {
           )
         })
       }
+      <button onClick={() => previous()}>Previous</button>
+      <button onClick={() => next()}>Next</button>
     </main>
   )
 }
